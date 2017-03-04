@@ -1,0 +1,257 @@
+<html>
+  <body>
+    <h1>Immutable JS</h1>
+    <br /><br /><br />
+
+    (look at the console)
+    <script>
+      // Constants
+      {
+      //   var x = "abc";
+      //   x = "def";
+
+        // const y = "abc";
+        // y = "def";
+      }
+
+      // Object freezing
+      {
+        // const person = {
+        //   firstName: "Vildan",
+        //   lastName: "Softic"
+        // }
+
+        // person.age = 31;
+        // console.log(person);
+
+        // Object.freeze(person);
+        // person.age = 30;
+        // person.height = 184;
+        // console.log(person);
+
+        // function strictlyFrozen() {
+        //   'use strict';
+          
+        //   person.age = 30;
+        //   person.height = 184;
+        //   console.log(person);
+        // }
+
+        // strictlyFrozen();
+      }
+
+      // Object freeze complex
+      {
+        // const person2 = {
+        //   firstName: "Vildan",
+        //   interest: ["JavaScript", ".NET", "..."]
+        // };
+
+        // Object.freeze(person2);
+        // person2.interest.push("Python");
+        // console.log(person2);
+
+
+        // {
+        //   function deepFreeze(obj) {
+
+        //     // All freezable props
+        //     var propNames = Object.getOwnPropertyNames(obj);
+
+        //     // Freeze props first before the object itself
+        //     propNames.forEach(function(name) {
+        //       var prop = obj[name];
+
+        //       // Recursively freeze if prop is object
+        //       if (typeof prop === 'object' && prop !== null)
+        //         deepFreeze(prop);
+        //     });
+
+        //     // Freeze root object itself
+        //     return Object.freeze(obj);
+        //   }
+
+        //   const person3 = {
+        //     firstName: "Vildan",
+        //     interest: ["JavaScript", ".NET", "..."]
+        //   };
+
+        //   deepFreeze(person3);
+        //   person3.interest.push("Python");
+        //   console.log(person3);
+        // }
+      }
+    </script>
+
+    <script>
+      // Object destruturing
+
+      // Naive cloning
+      // {
+      //   const author = {
+      //     firstName: 'Vildan',
+      //     lastName: 'Softic',
+      //     age: 31
+      //   }
+
+      //   const newAuthor = author
+      //   newAuthor.age = 27;
+      //   console.log(newAuthor);
+      //   console.log(author);
+      // }
+
+      // Using Object.assign
+      // {
+      //   const author = {
+      //     firstName: 'Vildan',
+      //     lastName: 'Softic',
+      //     age: 31
+      //   }
+
+      //   const newAuthor = Object.assign({}, author, { age: 27 });
+      //   console.log(author);
+      //   console.log(newAuthor);
+      // }
+
+      // Using object spread
+      {
+        // const author = {
+        //   firstName: 'Vildan',
+        //   lastName: 'Softic',
+        //   age: 31
+        // }
+
+        // const newAuthor = { ...author, age: 27 };
+        // console.log(author);
+        // console.log(newAuthor);
+      }
+
+      // Removing keys (mutable)
+      {
+        // const author = {
+        //   firstName: 'Vildan',
+        //   lastName: 'Softic',
+        //   age: 31,
+        //   foo: 'bar'
+        // }
+
+        // const newAuthor = Object.assign({}, author);
+        // delete newAuthor.foo;
+        // console.log(author);
+        // console.log(newAuthor);
+      }
+
+      // Removing immutable
+      {
+        // const author = {
+        //   firstName: 'Vildan',
+        //   lastName: 'Softic',
+        //   age: 31,
+        //   foo: 'bar'
+        // }
+
+        // const newAuthor = Object.keys(author)
+        // .reduce((result, key) => {
+        //   if ( typeof result === "string" ) {
+        //     result = { [result]: author[result] };
+        //   } else if ( key === 'foo') {
+        //     return result;
+        //   }
+
+        //   return { ...result, [key]: author[key] }
+        // });
+        // console.log(author);
+        // console.log(newAuthor);
+      }
+    </script>
+
+    <script>
+      // Array destructuring
+
+      // Naive cloning
+      {
+        //  const authors = ['Vildan', 'Anders'];
+        //  const newAuthors = authors;
+        //  newAuthors.push('Rob');
+
+        //  console.log(authors);
+        //  console.log(newAuthors);
+      }
+
+      // Using spread operator
+      {
+        //  const authors = ['Vildan', 'Anders'];
+        //  const newAuthors = [ ...authors, 'Rob'];
+
+        //  console.log(authors);
+        //  console.log(newAuthors);
+      }
+
+      // Copy by filter
+      {
+        // const authors = ['Vildan', 'Anders', 'Rob'];
+        // const newAuthors = authors.filter( a => a.toLowerCase().includes('an'));
+
+        // console.log(authors);
+        // console.log(newAuthors);
+      }
+
+      // Copy and replace
+      {
+        // const authors = ['Vildan', 'Anders', 'Rob'];
+        // const newAuthors = authors.map( a => a === 'Anders' ? 'Igor' : a);
+
+        // console.log(authors);
+        // console.log(newAuthors);
+      }
+
+      // Array merge / union
+      {
+        // const authors = ['Vildan', 'Anders', 'Rob'];
+        // const otherAuthors = ['Manfred', 'Holger'];
+        // const newAuthors = [ ...authors, ...otherAuthors];
+
+        // console.log(newAuthors);
+      }
+
+      // CRUD on array with complex objects
+      {
+        // const todos = [
+        //   { created: new Date(1601, 2, 20), text: 'To learn or not to learn JS?', author: 'Hamlet' },
+        //   { created: new Date(2000, 1, 1), text: 'Learn JS', author: 'Vildan' },
+        //   { created: new Date(2004, 1, 1), text: 'Learn even more JS', author: 'Vildan' },
+        //   { created: new Date(), text: 'Already learned everything', author: 'Brendan' },
+        // ];
+        // console.log(todos);
+        
+        
+        // const newTodoAdded = [ ... todos,
+        //   { created: new Date().getTime() + 86400000, text: 'Compile TypeScript to ASM', author: 'Chuck'}
+        // ]
+        // console.log(newTodoAdded);
+
+        
+        // const secondRemoved = [
+        //   ...todos.slice(0, 1),
+        //   ...todos.slice(2)
+        // ];
+        // console.log(secondRemoved);
+        
+
+        // const updateThirdDate = [
+        //   ...todos.slice(0, 2),
+        //   Object.assign( {}, todos[2], { created: new Date() }),
+        //   ...todos.slice(3)
+        // ];
+        // console.log(updateThirdDate);
+        
+
+        // const sortedDescByDate = [
+        //   ...todos.slice().sort( (a, b) => b.created.getTime() - a.created.getTime())
+        // ];
+        // console.log(sortedDescByDate);
+      }
+
+    </script>
+  </body>
+</html>

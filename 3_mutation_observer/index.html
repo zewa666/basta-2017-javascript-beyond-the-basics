@@ -1,0 +1,43 @@
+<html>
+  <body>
+    <h1>Mutation Observers</h1>
+    <small>https://github.com/gera2ld/github-widget-lite</small>
+    <br /><br /><br />
+
+
+    <div class="github-widget" data-repo="zewa666/vlib"></div>
+
+
+    <script src="../node_modules/github-widget-lite/dist/github-widget.js"></script>
+
+    <script>
+      // null wont work
+      // const readMore = document
+      //   .querySelector(".github-box-description a");
+      
+      // readMore.parentNode.removeChild(readMore);
+    </script>
+    
+    <script>
+      const target = document.querySelector('.github-widget');
+
+      const observer = new MutationObserver( (mutations) => {
+        mutations.forEach( (mutation) => {
+          const readMore = mutation.target
+            .querySelector(".github-box-description a");
+          readMore.parentNode.removeChild(readMore);
+        });
+
+        observer.disconnect();
+      });
+            
+      var config = {
+        attributes: true,
+        childList: true,
+        characterData: true
+      };
+
+      observer.observe(target, config);
+    </script>
+  </body>
+</html>

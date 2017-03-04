@@ -1,0 +1,50 @@
+<html>
+  <body>
+    <h1>MicroTask Queue</h1>
+    <br /><br /><br />
+
+    (look at the console)
+    <script>     
+      setTimeout(() => {
+        console.log("Timeout1");
+      }, 2);
+
+      setTimeout(() => {
+        console.log("Timeout2");
+      }, 1);
+
+      setTimeout(() => {
+        console.log("Timeout3");
+      }, 0);
+
+      requestAnimationFrame( () => 
+        console.log('Timeout requestAnimFrame'));
+
+      let p1 = Promise.resolve(1);
+      let p2 = Promise.resolve(2);
+      let p3 = Promise.resolve(3);
+      let p4 = Promise.resolve(4);
+      let p5 = Promise.resolve(5);
+
+      let nested = new Promise( (resolve) => {
+        let sub1 = Promise.resolve(1);
+        let sub2 = Promise.resolve(2);
+        let sub3 = Promise.resolve(3);
+
+        let subTotal = Promise.all([sub1, sub2, sub3])
+          .then( (res) => res.reduce( (prev, curr) => prev + curr, 0));
+          
+        resolve( subTotal );
+      });
+
+      Promise.all([p1, p2, p3, p4, p5, nested]).then( (res) => {
+        let total = res.reduce( (prev, curr) => prev + curr, 0);
+        console.log( "Timeout " + total );
+      });
+
+      setTimeout(() => {
+        console.log("Timeout4");
+      }, 0);
+    </script>
+  </body>
+</html>

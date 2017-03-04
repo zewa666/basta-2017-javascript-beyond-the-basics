@@ -1,0 +1,43 @@
+<html>
+  <body>
+    <h1>Memoization with WeakMap</h1>
+    <br /><br /><br />
+
+    (look at the console)
+    <script>
+      function memoize(fn) {
+        const args = arguments;
+        const lazyEval = fn.bind.apply(fn, args);
+
+        let cache = new WeakMap();
+
+        return function() {
+          if (!cache[arguments]) {
+            cache[arguments] = lazyEval();
+          }
+          
+          return cache[arguments];
+        }
+      }
+
+      function add(a, b) {
+        console.log(`Calculating ${a} + ${b}`);
+        return a + b;
+      }
+
+      console.group("Non-memoized")
+      console.log(add(1, 2));
+      console.log(add(1, 2));
+      console.log(add(1, 2));
+      console.groupEnd();
+      
+      console.group("Memoized")
+      const add1Plus2 = memoize(add, 1, 2);
+      console.log(add1Plus2());
+      console.log(add1Plus2());
+      console.log(add1Plus2());
+      console.groupEnd();
+      
+  </script>
+  </body>
+</html>

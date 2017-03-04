@@ -1,0 +1,117 @@
+<html>
+  <head>
+    <script src="../node_modules/marked/lib/marked.js"></script>
+    <style>
+      #readme-browser {
+        border: 1px solid black;
+        width: 100%;
+        height: 500px;
+        overflow: auto;
+      }
+
+      #readme-browser hr {
+        border: 5px solid red;
+        margin: 20px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Async Await</h1>
+    <br /><br /><br />
+
+    <button id="btn-load-jquery" onclick="promisePyramid()">Load jQuery PromisePyramid</button>
+    <button id="btn-load-jquery" onclick="thenChain()">Load jQuery ThenChain</button>
+    <button id="btn-load-jquery" onclick="loadJquery()">Load jQuery Async/Await</button><br /><br />
+    <button id="btn-load-multiple" onclick="loadMultiple()">Load multiple map.reduce</button>
+    <button id="btn-load-multiple-promise-all" onclick="loadMultiPromiseAll()">Load multiple Promise.all</button><br /><br />
+    <button id="btn-clear" onclick="clearOutput()">clear()</button>
+
+    <div id="readme-browser"></div>
+
+    <script>
+      const renderTarget = document.querySelector("#readme-browser");
+
+      /* Features */
+      function clearOutput() {
+        renderTarget.innerHTML = "";
+      }
+
+      function loadReadme(url) {
+        return fetch(url, {method: "GET"});
+      }
+      
+      function convertToHtml(markdown) {
+        return marked(markdown);
+      }
+
+      function renderConvertedMarkdown(target, html) {
+        target.innerHTML = html;
+      }
+
+
+
+      /* Handlers */
+      function promisePyramid() {
+        loadReadme("../node_modules/jquery/README.md")
+          .then( (response) => {
+            response.text()
+              .then( (markdown) => {
+                const html = convertToHtml(markdown);
+                renderConvertedMarkdown(renderTarget, html);
+              });
+          });
+      }
+
+      function thenChain() {
+        loadReadme("../node_modules/jquery/README.md")
+          .then( (response) => response.text())
+          .then( (markdown) => convertToHtml(markdown))
+          .then( (html) => renderConvertedMarkdown(renderTarget, html));
+      }
+
+      async function loadJquery() {
+        const readmeUrl = "../node_modules/jquery/README.md";
+        const response = await loadReadme(readmeUrl);
+        const markdown = await response.text();
+        const html = convertToHtml(markdown);
+
+        renderConvertedMarkdown(renderTarget, html);
+      }
+
+      async function loadMultiple() {
+        const packages = ["jquery", "marked", "github-widget-lite"];
+
+        const allHtml = await packages.map(async (package) => {
+          const url = `../node_modules/${package}/README.md`;
+          const response = await loadReadme(url);
+          const markdown = await response.text();
+          const html = convertToHtml(markdown);
+
+          return html;
+        }).reduce(async (prev, cur) => {
+          return await prev + "<hr />" + await cur;
+        });
+
+        renderConvertedMarkdown(renderTarget, allHtml);
+      }
+
+      async function loadMultiPromiseAll() {
+        const packages = ["jquery", "marked", "github-widget-lite"];
+
+        const allHtml = await Promise.all(
+          packages.map(async (package) => {
+          
+          const url = `../node_modules/${package}/README.md`;
+          const response = await loadReadme(url);
+          const markdown = await response.text();
+          const html = convertToHtml(markdown);
+
+          return html + "<hr />";
+          
+        }));
+
+        renderConvertedMarkdown(renderTarget, allHtml);
+      }
+    </script>
+  </body>
+</html>
